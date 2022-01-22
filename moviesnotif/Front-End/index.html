@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moviesnotif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+<body>
+
+    <main id="app">
+        <h1 class="text-center text-xl capitalize">
+            Site de notation de film
+        </h1>
+
+        <!-- Liste de film -->
+
+        <div class="my-10 mx-auto  p-2 md:p-0 md:w-11/12 lg:w-10/12 xl:w-9/12 grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <!-- Film -->
+            <div v-for="film in films"key="film.id" class=" relative">
+                <div class="relative">
+                        <!-- Font-sombre -->
+                    <div class="absolute w-full h-full bg-black bg-opacity-20">
+
+                    </div>
+                    <!-- notation -->
+                    <span class="absolute top-2 right-2 text-white">
+                        {{film.vote_average}}
+                    </span>
+                    <!-- image -->
+                    <img class="w-full h-auto" :src="'http://image.tmdb.org/t/p/w500'+film.poster_path" alt="">
+                </div>
+                <div class="px-2">
+                    <!-- Titre -->
+                    <h3 class="text-xl font-bold">{{film.title}}</h3>
+
+                    <!-- Information -->
+                    <div class="flex justify-between">
+                        <span>{{film.release_date}}</span>
+                        <span>La durée </span>
+                    </div>
+
+                </div>
+                 
+            </div>
+      </div>
+        
+    </main>
+
+    <script>
+       
+      var app = new Vue({
+        el: '#app',
+        data: {
+          films: [],
+        },
+
+        //initialisation de l'application 
+
+        mounted(){
+          this.fetchMovies()
+      },
+      methods:{
+          async fetchMovies(){
+            fetch('https://api.themoviedb.org/3/movie/popular?api_key=833c4822773bba014b004669626be8c8&language=en-US&page=1')
+            .then(async(response)=>{
+                var body= await response.text()
+                var data=JSON.parse(body);
+                this.films = data.results;
+                console.log(">>api",this.films);
+            })
+          }
+      }
+    })
+
+    </script>
+    
+</body>
+</html>
